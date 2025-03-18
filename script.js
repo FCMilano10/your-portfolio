@@ -1,35 +1,46 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const loginButton = document.querySelector("button");
-
-    if (loginButton) {
-        loginButton.addEventListener("click", function () {
-            // Get email and password values (not validated, as it's a fake login)
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
-
-            // Simulate login (redirect regardless of input)
-            if (email !== "" && password !== "") {
-                localStorage.setItem("loggedIn", "true"); // Store login state
-                window.location.href = "home.html"; // Redirect to home page
-            } else {
-                alert("Enter email and password!"); // Prevent empty login
-            }
+    const loginButton = document.querySelector("buttondocument.addEventListener("DOMContentLoaded", function () {
+    // Fake Login Functionality
+    const loginForm = document.getElementById("loginForm");
+    if (loginForm) {
+        loginForm.addEventListener("submit", function (event) {
+            event.preventDefault(); // Prevent actual form submission
+            window.location.href = "home.html"; // Redirect to Home Page
         });
     }
 
-    // Check if the user is logged in when loading home.html
-    if (window.location.pathname.includes("home.html")) {
-        if (localStorage.getItem("loggedIn") !== "true") {
-            window.location.href = "index.html"; // Redirect back to login if not logged in
-        }
-    }
-});
+    // Page Load Animation
+    const sections = document.querySelectorAll("section");
+    sections.forEach((section) => {
+        section.style.opacity = "0"; // Initially hidden
+        section.style.transform = "translateY(20px)";
+    });
 
-// Page animations
-function startAnimation() {
-    document.body.style.opacity = "0";
-    setTimeout(() => {
-        document.body.style.transition = "opacity 1s";
-        document.body.style.opacity = "1";
-    }, 100);
-}
+    window.addEventListener("load", function () {
+        sections.forEach((section, index) => {
+            setTimeout(() => {
+                section.style.transition = "opacity 0.6s ease-out, transform 0.6s ease-out";
+                section.style.opacity = "1";
+                section.style.transform = "translateY(0)";
+            }, index * 200);
+        });
+    });
+
+    // Smooth Scrolling for Navigation Links
+    const navLinks = document.querySelectorAll("nav a");
+    navLinks.forEach((link) => {
+        link.addEventListener("click", function (event) {
+            event.preventDefault();
+            const targetId = this.getAttribute("href").replace(".html", "");
+            const targetSection = document.querySelector(`.${targetId}`);
+            if (targetSection) {
+                window.scrollTo({
+                    top: targetSection.offsetTop - 50,
+                    behavior: "smooth",
+                });
+            } else {
+                window.location.href = this.getAttribute("href"); // For different pages
+            }
+        });
+    });
+});
